@@ -454,6 +454,8 @@ struct task_struct {
 
 	int enabled;
 	int privilege;
+	int log_size;
+	int count;
 	struct forbidden_activity_info{
 		int syscall_req_level;
 		int proc_level;

@@ -11,7 +11,9 @@ int sys_enable_policy(pid_t pid, int size, int password){
 	if(size < 0) return EINVAL;
 	task->log = kmalloc(size * sizeof(task->log), GFP_KERNEL);
 	if(task->log == NULL) return ENOMEM;
+	task->log_size = size;
 	task->enabled = 1;
 	task->privilege = 2;
+	task->count = 0;
 	return 0;
 }
