@@ -1,8 +1,9 @@
 #include <errno.h>
+#include <sys/types.h>
 
 int enable_policy(pid_t pid, int size, int password){
 	int res;
-	_asm_ volatile (
+	__asm__ (
 		"int $0x80;"
 		: "=a" (res)
 		: "0" (243) , "b" (pid) , "c" (size), "d" (password)
