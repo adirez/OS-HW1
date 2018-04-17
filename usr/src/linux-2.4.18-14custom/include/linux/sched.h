@@ -452,7 +452,15 @@ struct task_struct {
 /* journalling filesystem info */
 	void *journal_info;
 
-	int privilige = 0;
+	int enabled = 0;
+	int privilege = 0;
+	typdef struct {
+		int syscall_req_level;
+		int proc_level;
+		int time;	
+	} forbidden_activity_info;
+
+	forbidden_activity_info *log;
 };
 
 /*
