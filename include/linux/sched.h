@@ -451,6 +451,8 @@ struct task_struct {
 
 /* journalling filesystem info */
 	void *journal_info;
+
+	int privilige = 0;
 };
 
 /*
