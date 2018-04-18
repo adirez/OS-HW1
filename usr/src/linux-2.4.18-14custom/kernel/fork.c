@@ -754,6 +754,10 @@ int do_fork(unsigned long clone_flags, unsigned long stack_start,
 	write_lock_irq(&tasklist_lock);
 
 	/* CLONE_PARENT re-uses the old parent */
+
+	/* added our new values here*/
+	
+	/* added our new values here*/
 	p->p_opptr = current->p_opptr;
 	p->p_pptr = current->p_pptr;
 	if (!(clone_flags & CLONE_PARENT)) {
