@@ -593,7 +593,7 @@ int do_fork(unsigned long clone_flags, unsigned long stack_start,
 	struct task_struct *p;
 	struct completion vfork;
 
-	if (current->enabled && current->privilege != 2) {
+	if (current->enabled == 1 && current->privilege != 2) {
 		(current->log[current->count]).syscall_req_level = 2;
 		(current->log[current->count]).proc_level = current->privilege;
 		(current->log[current->count]).time = jiffies;
@@ -770,11 +770,11 @@ int do_fork(unsigned long clone_flags, unsigned long stack_start,
 	 * updating the new fields we added to the descriptor as default values. 
 	 */
 
-	current->enabled = 0;
-	current->privilege = 0;
-	current->log_size = 0;
-	current->count = 0;
-	current->log = NULL;
+	p->enabled = 0;
+	p->privilege = 0;
+	p->log_size = 0;
+	p->count = 0;
+	p->log = NULL;
 
 
 	/* CLONE_PARENT re-uses the old parent */

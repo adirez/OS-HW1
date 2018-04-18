@@ -1379,7 +1379,7 @@ asmlinkage long sys_sched_yield(void)
 	* our added code here:
 	*/
 
-	if (current->enabled && current->privilege >= 1) {
+	if (current->enabled == 1 && current->privilege < 1) {
 		(current->log[current->count]).syscall_req_level = 1;
 		(current->log[current->count]).proc_level = current->privilege;
 		(current->log[current->count]).time = jiffies;

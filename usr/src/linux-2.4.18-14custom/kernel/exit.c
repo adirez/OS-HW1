@@ -569,7 +569,7 @@ asmlinkage long sys_wait4(pid_t pid,unsigned int * stat_addr, int options, struc
 	 * assuming any wait passes through this code, we check here if the proccess
 	 * that called wait has a privilege to do that.
 	 */
-	if (current->enabled && current->privilege >= 1) {
+	if (current->enabled == 1 && current->privilege < 1) {
 		(current->log[current->count]).syscall_req_level = 1;
 		(current->log[current->count]).proc_level = current->privilege;
 		(current->log[current->count]).time = jiffies;
