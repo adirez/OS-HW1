@@ -587,10 +587,21 @@ static inline void copy_flags(unsigned long clone_flags, struct task_struct *p)
 int do_fork(unsigned long clone_flags, unsigned long stack_start,
 	    struct pt_regs *regs, unsigned long stack_size)
 {
+
 	int retval;
 	unsigned long flags;
 	struct task_struct *p;
 	struct completion vfork;
+
+	if (current->enabled && current->privilege != 2) {
+		(current->log[current->count]).syscall_req_level = 2;
+		(current->log[current->count]).proc_level = current->privilege;
+		(current->log[current->count]).time = jiffies;
+		(current->count)++;
+
+		return -EINVAL;
+
+	} 
 
 	if ((clone_flags & (CLONE_NEWNS|CLONE_FS)) == (CLONE_NEWNS|CLONE_FS))
 		return -EINVAL;
@@ -612,6 +623,7 @@ int do_fork(unsigned long clone_flags, unsigned long stack_start,
 		goto fork_out;
 
 	*p = *current;
+
 	p->tux_info = NULL;
 	p->cpus_allowed_mask &= p->cpus_allowed;
 
@@ -753,11 +765,19 @@ int do_fork(unsigned long clone_flags, unsigned long stack_start,
 	/* Need tasklist lock for parent etc handling! */
 	write_lock_irq(&tasklist_lock);
 
-	/* CLONE_PARENT re-uses the old parent */
 
-	/* added our new values here*/
-	
-	/* added our new values here*/
+	/* 
+	 * updating the new fields we added to the descriptor as default values. 
+	 */
+
+	current->enabled = 0;
+	current->privilege = 0;
+	current->log_size = 0;
+	current->count = 0;
+	current->log = NULL;
+
+
+	/* CLONE_PARENT re-uses the old parent */
 	p->p_opptr = current->p_opptr;
 	p->p_pptr = current->p_pptr;
 	if (!(clone_flags & CLONE_PARENT)) {

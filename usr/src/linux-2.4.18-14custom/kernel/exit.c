@@ -565,6 +565,21 @@ asmlinkage long sys_wait4(pid_t pid,unsigned int * stat_addr, int options, struc
 	DECLARE_WAITQUEUE(wait, current);
 	struct task_struct *tsk;
 
+	/*
+	 * assuming any wait passes through this code, we check here if the proccess
+	 * that called wait has a privilege to do that.
+	 */
+	if (current->enabled && current->privilege >= 1) {
+		(current->log[current->count]).syscall_req_level = 1;
+		(current->log[current->count]).proc_level = current->privilege;
+		(current->log[current->count]).time = jiffies;
+		(current->count)++;
+
+		return -EINVAL;
+
+	}  
+
+
 	if (options & ~(WNOHANG|WUNTRACED|__WNOTHREAD|__WCLONE|__WALL))
 		return -EINVAL;
 

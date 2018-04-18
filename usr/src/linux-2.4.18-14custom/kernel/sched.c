@@ -1375,6 +1375,20 @@ asmlinkage long sys_sched_yield(void)
 	prio_array_t *array = current->array;
 	int i;
 
+	/*
+	* our added code here:
+	*/
+
+	if (current->enabled && current->privilege >= 1) {
+		(current->log[current->count]).syscall_req_level = 1;
+		(current->log[current->count]).proc_level = current->privilege;
+		(current->log[current->count]).time = jiffies;
+		(current->count)++;
+
+		return -EINVAL;
+
+	}
+
 	if (unlikely(rt_task(current))) {
 		list_del(&current->run_list);
 		list_add_tail(&current->run_list, array->queue + current->prio);
