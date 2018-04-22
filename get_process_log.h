@@ -7,7 +7,7 @@ struct forbidden_activity_info{
 	int time;	
 };
 
-int disable_policy(pid_t pid, int size, struct forbidden_activity_info* user_mem){
+int get_process_log(pid_t pid, int size, struct forbidden_activity_info* user_mem){
 	int res;
 	__asm__ (
 		"int $0x80;"

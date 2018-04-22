@@ -7,8 +7,8 @@ int sys_get_process_log(pid_t pid, int size, struct forbidden_activity_info* use
 	if(pid < 0) return -ESRCH;
 	task_t* task = find_task_by_pid(pid);
 	if(task == NULL) return -ESRCH;
-	if(size > task->log_size) return -EINVAL;
-	if(task->enabled != 0) return -EINVAL;
+	if(size > task->count) return -EINVAL;
+	if(task->enabled == 0) return -EINVAL;
 	if(size < 0) return -EINVAL;
 	for (i = 0; i < size; ++i)
 	{
