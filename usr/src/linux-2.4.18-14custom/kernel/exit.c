@@ -33,6 +33,13 @@ static void release_task(struct task_struct * p)
 #ifdef CONFIG_SMP
 	wait_task_inactive(p);
 #endif
+	//freeing the log if the task is released without being disabled
+	if (p->enabled == 1) {
+		kfree(p->log);
+		p->enabled = 0;
+		p->privilege = 0;
+	}
+	
 	atomic_dec(&p->user->processes);
 	free_uid(p->user);
 	unhash_process(p);
